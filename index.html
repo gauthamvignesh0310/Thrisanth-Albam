@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#12151b">
+  <title>Thrisanth's Memories</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <section class="view home-view" id="home-view" aria-labelledby="home-title">
+      <header class="home-header">
+        <p class="eyebrow">An archive of the days that shaped us</p>
+        <h1 id="home-title">Thrisanth's <span>Albam</span></h1>
+        <p class="home-intro">A little collection of places, people, and the moments worth keeping close.</p>
+      </header>
+      <div class="choice-grid">
+        <button class="choice-card photo-choice" id="photos-button" type="button">
+          <span class="choice-index">01 / Still frames</span><span class="choice-icon" aria-hidden="true">↗</span>
+          <strong>Photos</strong><span>Turn the pages</span>
+        </button>
+      </div>
+      <p class="home-footer">THRISANTH · PERSONAL ARCHIVE · 2013</p>
+    </section>
+
+    <section class="view album-view" id="album-view" aria-labelledby="album-title" hidden>
+      <header class="view-header"><button class="back-button" data-home type="button">← <span>Home</span></button><div><p class="eyebrow">Still frames</p><h2 id="album-title">Thrisanth's Photo Album</h2></div><span class="view-count">01—07</span></header>
+      <section class="stage" aria-label="Thrisanth's photo flipbook">
+        <button class="nav-button" id="previous" type="button" aria-label="Previous page">←</button>
+        <div class="book-wrap"><div class="book" id="book"><article class="page cover-page" style="z-index: 8"><div class="face front cover"><div class="cover-mark"><p class="eyebrow">A personal archive</p><h3>Thrisanth's<br><em>Photo Album</em></h3><p>Small moments, kept forever</p></div></div><div class="face back"></div></article></div></div>
+        <button class="nav-button" id="next" type="button" aria-label="Next page">→</button>
+        <div class="rotate-controls" aria-label="Photo rotation controls">
+          <button class="rotate-button" id="rotate-left-image" type="button" aria-label="Rotate left side image" disabled><span>Rotate Left Image</span><span aria-hidden="true">↺</span></button>
+          <button class="rotate-button" id="rotate-right-image" type="button" aria-label="Rotate right side image" disabled><span>Rotate Right Image</span><span aria-hidden="true">↻</span></button>
+        </div>
+      </section>
+      <div class="progress" aria-live="polite"><span id="progress-label">Cover</span><div class="dots" id="dots" aria-label="Choose a memory"></div></div>
+      <p class="hint">Use the arrows, page corners, or keyboard arrows to wander.</p>
+    </section>
+
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Photo viewer"><button class="close-lightbox" type="button" aria-label="Close photo viewer">×</button><img id="lightbox-image" src="" alt=""></div>
+  <script src="script.js"></script>
+</body>
+</html>
