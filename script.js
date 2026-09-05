@@ -17,7 +17,8 @@ function showView(view) {
 
 document.querySelector('#photos-button').addEventListener('click', () => {
   showView(albumView);
-  goTo(currentPage);
+  loadPageImages(0);
+  if (isMobileLayout) loadPageImages(1);
 });
 document.querySelectorAll('[data-home]').forEach((button) => button.addEventListener('click', () => showView(homeView)));
 
@@ -60,7 +61,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   polaroid.className = 'polaroid';
   const image = document.createElement('img');
   if (!isMobileLayout) polaroid.classList.add('is-loading');
-  image.src = getPhotoUrl(photo);
+  image.dataset.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
   image.loading = 'lazy';
   image.decoding = 'async';
@@ -121,6 +122,8 @@ function generatePages() {
 
 function goTo(pageIndex) {
   currentPage = Math.max(0, Math.min(pageIndex, totalPages));
+  loadPageImages(isMobileLayout ? currentPage : currentPage - 1);
+  loadPageImages(isMobileLayout ? currentPage + 1 : currentPage);
   book.querySelectorAll('.page').forEach((page, index) => {
     const isCover = page.classList.contains('cover-page');
     const pageIndex = isCover ? 0 : index;
@@ -133,6 +136,16 @@ function goTo(pageIndex) {
   rotateRightImageButton.disabled = getVisibleImage('right') === null;
   progressLabel.textContent = currentPage === 0 ? 'Cover' : `Photo ${String(currentPage).padStart(2, '0')} of ${String(photos.length).padStart(2, '0')}`;
   dots.querySelectorAll('.dot').forEach((dot, index) => dot.classList.toggle('active', index === currentPage - 1));
+}
+
+function loadPageImages(pageIndex) {
+  const page = book.querySelector(`.page[data-page="${pageIndex}"]`);
+  if (!page) return;
+  page.querySelectorAll('img[data-src]').forEach((image) => {
+    if (image.hasAttribute('src')) return;
+    image.closest('.polaroid').classList.add('is-loading');
+    image.src = image.dataset.src;
+  });
 }
 
 function getVisibleImage(side) {
