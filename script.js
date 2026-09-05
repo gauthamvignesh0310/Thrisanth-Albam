@@ -60,8 +60,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   polaroid.className = 'polaroid';
   const image = document.createElement('img');
   if (!isMobileLayout) polaroid.classList.add('is-loading');
-  if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
-  else image.src = getPhotoUrl(photo);
+  image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
   image.loading = 'lazy';
   image.decoding = 'async';
@@ -122,16 +121,6 @@ function generatePages() {
 
 function goTo(pageIndex) {
   currentPage = Math.max(0, Math.min(pageIndex, totalPages));
-  if (isMobileLayout && albumView.classList.contains('is-active')) {
-    [currentPage, currentPage + 1].forEach((photoPage) => {
-      const image = book.querySelector(`.page[data-page="${photoPage}"] img`);
-      if (image && !image.hasAttribute('src')) {
-        image.closest('.polaroid').classList.add('is-loading');
-        image.loading = 'eager';
-        image.src = image.dataset.src;
-      }
-    });
-  }
   book.querySelectorAll('.page').forEach((page, index) => {
     const isCover = page.classList.contains('cover-page');
     const pageIndex = isCover ? 0 : index;
