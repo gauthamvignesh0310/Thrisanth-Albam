@@ -32,10 +32,8 @@ let currentPage = 0;
 const isMobileLayout = window.matchMedia('(max-width: 650px)').matches;
 const totalPages = isMobileLayout ? photos.length : Math.ceil(photos.length / 2);
 const rotationByPhoto = new Map(photos.map((photo) => [photo, 0]));
-const photoCacheKey = 'af0ac4e';
-
 function getPhotoUrl(photo) {
-  return `${photo}?v=${photoCacheKey}`;
+  return photo;
 }
 
 document.querySelector('.cover-page').addEventListener('click', () => goTo(currentPage + 1));
@@ -53,6 +51,8 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
   image.loading = isMobileLayout ? 'eager' : 'lazy';
+  image.decoding = 'async';
+  if (photoIndex === 0) image.fetchPriority = 'high';
   image.dataset.photoIndex = photoIndex;
   polaroid.appendChild(image);
   face.appendChild(polaroid);
