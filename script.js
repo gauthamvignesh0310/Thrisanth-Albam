@@ -32,7 +32,7 @@ let currentPage = 0;
 const isMobileLayout = window.matchMedia('(max-width: 650px)').matches;
 const totalPages = isMobileLayout ? photos.length : Math.ceil(photos.length / 2);
 const rotationByPhoto = new Map(photos.map((photo) => [photo, 0]));
-const photoCacheKey = String(Date.now());
+const photoCacheKey = 'af0ac4e';
 
 function getPhotoUrl(photo) {
   return `${photo}?v=${photoCacheKey}`;
@@ -49,9 +49,10 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   const polaroid = document.createElement('figure');
   polaroid.className = 'polaroid';
   const image = document.createElement('img');
-  image.src = getPhotoUrl(photo);
+  if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
+  else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
-  image.loading = 'lazy';
+  image.loading = isMobileLayout ? 'eager' : 'lazy';
   image.dataset.photoIndex = photoIndex;
   polaroid.appendChild(image);
   face.appendChild(polaroid);
@@ -103,6 +104,12 @@ function generatePages() {
 
 function goTo(pageIndex) {
   currentPage = Math.max(0, Math.min(pageIndex, totalPages));
+  if (isMobileLayout) {
+    [currentPage, currentPage + 1].forEach((photoPage) => {
+      const image = book.querySelector(`.page[data-page="${photoPage}"] img`);
+      if (image && !image.hasAttribute('src')) image.src = image.dataset.src;
+    });
+  }
   book.querySelectorAll('.page').forEach((page, index) => {
     const isCover = page.classList.contains('cover-page');
     const pageIndex = isCover ? 0 : index;
