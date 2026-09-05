@@ -190,10 +190,15 @@ code { color: var(--accent); }
 
 @media (max-width: 650px) {
   .album-view .view-header { margin-bottom: 24px; }
-  .album-view .stage { grid-template-columns: 34px minmax(0, 1fr) 34px; gap: 4px; }
+  .album-view .stage { display: block; }
   .album-view .book-wrap { width: 100%; height: min(68vh, 430px); min-height: 300px; }
+  .album-view .page { left: 0; width: 100%; }
   .album-view .face, .album-view .memory-page { padding: 12px; }
   .album-view .face::after { inset: 6px; }
+  .album-view .nav-button { position: absolute; top: 50%; z-index: 6; transform: translateY(-50%); }
+  .album-view .nav-button:hover:not(:disabled) { transform: translateY(-50%) scale(1.08); }
+  .album-view #previous { left: -4px; }
+  .album-view #next { right: -4px; }
   .album-view .rotate-controls { bottom: -48px; gap: 5px; }
   .album-view .rotate-button { padding: 7px 9px; }
   .album-view .rotate-button span:first-child { font-size: 8px; }
