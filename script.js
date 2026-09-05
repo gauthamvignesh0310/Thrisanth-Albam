@@ -31,6 +31,11 @@ const lightboxImage = document.querySelector('#lightbox-image');
 let currentPage = 0;
 const totalPages = Math.ceil(photos.length / 2);
 const rotationByPhoto = new Map(photos.map((photo) => [photo, 0]));
+const photoCacheKey = String(Date.now());
+
+function getPhotoUrl(photo) {
+  return `${photo}?v=${photoCacheKey}`;
+}
 
 document.querySelector('.cover-page').addEventListener('click', () => goTo(currentPage + 1));
 
@@ -43,12 +48,16 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   const polaroid = document.createElement('figure');
   polaroid.className = 'polaroid';
   const image = document.createElement('img');
-  image.src = photo;
+  image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
   image.loading = 'lazy';
   image.dataset.photoIndex = photoIndex;
   polaroid.appendChild(image);
   face.appendChild(polaroid);
+  image.addEventListener('error', () => {
+    polaroid.remove();
+    face.setAttribute('aria-hidden', 'true');
+  }, { once: true });
   image.addEventListener('click', (event) => { event.stopPropagation(); openLightbox(photo); });
 
   return face;
@@ -133,12 +142,13 @@ function applyPhotoRotation(photo, rotation) {
 }
 
 function openLightbox(photo) {
-  lightboxImage.src = photo;
+  lightboxImage.src = getPhotoUrl(photo);
   lightboxImage.alt = '';
   lightboxImage.style.transform = `rotate(${rotationByPhoto.get(photo) || 0}deg)`;
   lightbox.classList.add('open');
   lightbox.setAttribute('aria-hidden', 'false');
 }
+lightboxImage.addEventListener('error', closeLightbox);
 function closeLightbox() { lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden', 'true'); }
 
 viewCount.textContent = `01—${String(photos.length).padStart(2, '0')}`;
