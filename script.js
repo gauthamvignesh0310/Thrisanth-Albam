@@ -33,7 +33,10 @@ const isMobileLayout = window.matchMedia('(max-width: 650px)').matches;
 const totalPages = isMobileLayout ? photos.length : Math.ceil(photos.length / 2);
 const rotationByPhoto = new Map(photos.map((photo) => [photo, 0]));
 function getPhotoUrl(photo) {
-  return photo;
+  if (!isMobileLayout) return photo;
+  const filename = photo.slice(photo.lastIndexOf('/') + 1);
+  const basename = filename.slice(0, filename.lastIndexOf('.'));
+  return `Photos/mobile/${encodeURIComponent(basename)}.webp`;
 }
 
 document.querySelector('.cover-page').addEventListener('click', () => goTo(currentPage + 1));
