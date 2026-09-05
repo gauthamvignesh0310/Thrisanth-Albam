@@ -32,6 +32,12 @@ let currentPage = 0;
 const isMobileLayout = window.matchMedia('(max-width: 650px)').matches;
 const totalPages = isMobileLayout ? photos.length : Math.ceil(photos.length / 2);
 const rotationByPhoto = new Map(photos.map((photo) => [photo, 0]));
+let touchStartX = null;
+
+if (isMobileLayout) {
+  previousButton.setAttribute('aria-label', 'Previous photo');
+  nextButton.setAttribute('aria-label', 'Next photo');
+}
 function getPhotoUrl(photo) {
   if (!isMobileLayout) return photo;
   const filename = photo.slice(photo.lastIndexOf('/') + 1);
@@ -183,6 +189,16 @@ previousButton.addEventListener('click', () => goTo(currentPage - 1));
 nextButton.addEventListener('click', () => goTo(currentPage + 1));
 rotateLeftImageButton.addEventListener('click', () => rotateVisiblePhoto('left'));
 rotateRightImageButton.addEventListener('click', () => rotateVisiblePhoto('right'));
+book.addEventListener('touchstart', (event) => {
+  touchStartX = event.changedTouches[0].clientX;
+}, { passive: true });
+book.addEventListener('touchend', (event) => {
+  if (touchStartX === null) return;
+  const distance = event.changedTouches[0].clientX - touchStartX;
+  touchStartX = null;
+  if (Math.abs(distance) < 45) return;
+  goTo(currentPage + (distance < 0 ? 1 : -1));
+}, { passive: true });
 document.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowLeft') goTo(currentPage - 1);
   if (event.key === 'ArrowRight') goTo(currentPage + 1);
