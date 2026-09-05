@@ -59,7 +59,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   const polaroid = document.createElement('figure');
   polaroid.className = 'polaroid';
   const image = document.createElement('img');
-  polaroid.classList.add('is-loading');
+  if (!isMobileLayout) polaroid.classList.add('is-loading');
   if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
   else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
@@ -126,6 +126,7 @@ function goTo(pageIndex) {
     [currentPage, currentPage + 1].forEach((photoPage) => {
       const image = book.querySelector(`.page[data-page="${photoPage}"] img`);
       if (image && !image.hasAttribute('src')) {
+        image.closest('.polaroid').classList.add('is-loading');
         image.loading = 'eager';
         image.src = image.dataset.src;
       }
