@@ -15,7 +15,10 @@ function showView(view) {
   window.scrollTo(0, 0);
 }
 
-document.querySelector('#photos-button').addEventListener('click', () => showView(albumView));
+document.querySelector('#photos-button').addEventListener('click', () => {
+  showView(albumView);
+  goTo(currentPage);
+});
 document.querySelectorAll('[data-home]').forEach((button) => button.addEventListener('click', () => showView(homeView)));
 
 const book = document.querySelector('#book');
@@ -60,7 +63,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
   else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
-  image.loading = isMobileLayout ? 'eager' : 'lazy';
+  image.loading = 'lazy';
   image.decoding = 'async';
   if (photoIndex === 0) image.fetchPriority = 'high';
   image.dataset.photoIndex = photoIndex;
@@ -119,7 +122,7 @@ function generatePages() {
 
 function goTo(pageIndex) {
   currentPage = Math.max(0, Math.min(pageIndex, totalPages));
-  if (isMobileLayout) {
+  if (isMobileLayout && albumView.classList.contains('is-active')) {
     [currentPage, currentPage + 1].forEach((photoPage) => {
       const image = book.querySelector(`.page[data-page="${photoPage}"] img`);
       if (image && !image.hasAttribute('src')) {
