@@ -50,6 +50,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   const polaroid = document.createElement('figure');
   polaroid.className = 'polaroid';
   const image = document.createElement('img');
+  polaroid.classList.add('is-loading');
   if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
   else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
@@ -59,10 +60,15 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   image.dataset.photoIndex = photoIndex;
   polaroid.appendChild(image);
   face.appendChild(polaroid);
+  image.addEventListener('load', () => polaroid.classList.remove('is-loading'), { once: true });
   image.addEventListener('error', () => {
+    if (isMobileLayout && image.src.endsWith(getPhotoUrl(photo))) {
+      image.src = photo;
+      return;
+    }
     polaroid.remove();
     face.setAttribute('aria-hidden', 'true');
-  }, { once: true });
+  });
   image.addEventListener('click', (event) => { event.stopPropagation(); openLightbox(photo); });
 
   return face;
@@ -162,7 +168,7 @@ function applyPhotoRotation(photo, rotation) {
 }
 
 function openLightbox(photo) {
-  lightboxImage.src = getPhotoUrl(photo);
+  lightboxImage.src = photo;
   lightboxImage.alt = '';
   lightboxImage.style.transform = `rotate(${rotationByPhoto.get(photo) || 0}deg)`;
   lightbox.classList.add('open');
