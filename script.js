@@ -84,7 +84,11 @@ function generatePages() {
   const pageIncrement = isMobileLayout ? 1 : 2;
   for (let photoIndex = 0; photoIndex < photos.length; photoIndex += pageIncrement) {
     const leafIndex = isMobileLayout ? photoIndex : photoIndex / 2;
-    const page = createPage(photos[photoIndex], photos[photoIndex + 1], leafIndex);
+    const page = createPage(
+      photos[photoIndex],
+      isMobileLayout ? undefined : photos[photoIndex + 1],
+      leafIndex
+    );
     page.style.zIndex = totalPages - leafIndex;
     book.appendChild(page);
 
