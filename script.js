@@ -46,7 +46,7 @@ function getPhotoUrl(photo) {
   if (!isMobileLayout) return photo;
   const filename = photo.slice(photo.lastIndexOf('/') + 1);
   const basename = filename.slice(0, filename.lastIndexOf('.'));
-  return `Photos/mobile/${encodeURIComponent(basename)}.webp`;
+  return `Optimized/${encodeURIComponent(basename)}.webp`;
 }
 
 document.querySelector('.cover-page').addEventListener('click', () => goTo(currentPage + 1));
