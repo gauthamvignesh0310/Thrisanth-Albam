@@ -204,4 +204,5 @@ code { color: var(--accent); }
   .album-view .rotate-button span:first-child { font-size: 8px; }
   .album-view .rotate-button span:last-child { font-size: 17px; }
   .album-view .progress { margin-top: 58px; }
+  .album-view .dots { width: 100%; flex-wrap: wrap; justify-content: center; }
 }

@@ -29,7 +29,8 @@ const rotateRightImageButton = document.querySelector('#rotate-right-image');
 const lightbox = document.querySelector('#lightbox');
 const lightboxImage = document.querySelector('#lightbox-image');
 let currentPage = 0;
-const totalPages = Math.ceil(photos.length / 2);
+const isMobileLayout = window.matchMedia('(max-width: 650px)').matches;
+const totalPages = isMobileLayout ? photos.length : Math.ceil(photos.length / 2);
 const rotationByPhoto = new Map(photos.map((photo) => [photo, 0]));
 const photoCacheKey = String(Date.now());
 
@@ -68,8 +69,8 @@ function createPage(frontPhoto, backPhoto, leafIndex) {
   page.className = 'page';
   page.dataset.page = leafIndex;
   page.append(
-    createPhotoFace(frontPhoto, leafIndex * 2, 'front'),
-    createPhotoFace(backPhoto, leafIndex * 2 + 1, 'back')
+    createPhotoFace(frontPhoto, isMobileLayout ? leafIndex : leafIndex * 2, 'front'),
+    createPhotoFace(backPhoto, isMobileLayout ? undefined : leafIndex * 2 + 1, 'back')
   );
   page.addEventListener('click', () => {
     const pageNumber = leafIndex + 1;
@@ -80,8 +81,9 @@ function createPage(frontPhoto, backPhoto, leafIndex) {
 }
 
 function generatePages() {
-  for (let photoIndex = 0; photoIndex < photos.length; photoIndex += 2) {
-    const leafIndex = photoIndex / 2;
+  const pageIncrement = isMobileLayout ? 1 : 2;
+  for (let photoIndex = 0; photoIndex < photos.length; photoIndex += pageIncrement) {
+    const leafIndex = isMobileLayout ? photoIndex : photoIndex / 2;
     const page = createPage(photos[photoIndex], photos[photoIndex + 1], leafIndex);
     page.style.zIndex = totalPages - leafIndex;
     book.appendChild(page);
@@ -89,7 +91,7 @@ function generatePages() {
     const dot = document.createElement('button');
     dot.className = 'dot';
     dot.type = 'button';
-    dot.ariaLabel = `Go to spread ${leafIndex + 1}`;
+    dot.ariaLabel = `Go to ${isMobileLayout ? 'photo' : 'spread'} ${leafIndex + 1}`;
     dot.addEventListener('click', () => goTo(leafIndex + 1));
     dots.appendChild(dot);
   }
@@ -113,6 +115,10 @@ function goTo(pageIndex) {
 
 function getVisibleImage(side) {
   if (currentPage === 0 || currentPage > totalPages) return null;
+  if (isMobileLayout) {
+    if (side === 'left') return null;
+    return book.querySelector(`.page[data-page="${currentPage - 1}"]:not(.flipped) .front img`);
+  }
   const leafIndex = side === 'left' ? currentPage - 2 : currentPage - 1;
   const faceClass = side === 'left' ? 'back' : 'front';
   const pageState = side === 'left' ? '.flipped' : ':not(.flipped)';
