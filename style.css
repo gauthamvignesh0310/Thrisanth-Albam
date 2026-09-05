@@ -189,6 +189,14 @@ code { color: var(--accent); }
 .album-view .memory-page img { transform-origin: center; transition: transform .35s cubic-bezier(.22,.61,.36,1); }
 
 @media (max-width: 650px) {
-  .album-view .book-wrap { width: 100%; height: min(620px, 78vh); min-height: 500px; }
-  .album-view .face, .album-view .memory-page { padding: 20px; }
+  .album-view .view-header { margin-bottom: 24px; }
+  .album-view .stage { grid-template-columns: 34px minmax(0, 1fr) 34px; gap: 4px; }
+  .album-view .book-wrap { width: 100%; height: min(68vh, 430px); min-height: 300px; }
+  .album-view .face, .album-view .memory-page { padding: 12px; }
+  .album-view .face::after { inset: 6px; }
+  .album-view .rotate-controls { bottom: -48px; gap: 5px; }
+  .album-view .rotate-button { padding: 7px 9px; }
+  .album-view .rotate-button span:first-child { font-size: 8px; }
+  .album-view .rotate-button span:last-child { font-size: 17px; }
+  .album-view .progress { margin-top: 58px; }
 }
