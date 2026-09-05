@@ -60,7 +60,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
   else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
-  image.loading = isMobileLayout ? 'eager' : 'lazy';
+  image.loading = 'lazy';
   image.decoding = 'async';
   if (photoIndex === 0) image.fetchPriority = 'high';
   image.dataset.photoIndex = photoIndex;
