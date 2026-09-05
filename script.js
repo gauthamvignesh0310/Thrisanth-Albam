@@ -60,7 +60,7 @@ function createPhotoFace(photo, photoIndex, faceClass) {
   if (isMobileLayout) image.dataset.src = getPhotoUrl(photo);
   else image.src = getPhotoUrl(photo);
   image.alt = `Photo ${photoIndex + 1}`;
-  image.loading = 'lazy';
+  image.loading = isMobileLayout ? 'eager' : 'lazy';
   image.decoding = 'async';
   if (photoIndex === 0) image.fetchPriority = 'high';
   image.dataset.photoIndex = photoIndex;
@@ -122,7 +122,10 @@ function goTo(pageIndex) {
   if (isMobileLayout) {
     [currentPage, currentPage + 1].forEach((photoPage) => {
       const image = book.querySelector(`.page[data-page="${photoPage}"] img`);
-      if (image && !image.hasAttribute('src')) image.src = image.dataset.src;
+      if (image && !image.hasAttribute('src')) {
+        image.loading = 'eager';
+        image.src = image.dataset.src;
+      }
     });
   }
   book.querySelectorAll('.page').forEach((page, index) => {
